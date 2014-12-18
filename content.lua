@@ -53,8 +53,8 @@ local ok, err = ngx.on_abort(function ()
 	ngx.exit(499)
 end)
 if not ok then
-	-- ngx.log(ngx.ERR, "Can't register on_abort function.", err)
-	-- ngx.exit(500)
+	ngx.log(ngx.ERR, "Can't register on_abort function.", err)
+	ngx.exit(500)
 end
 
 -- try reading values from dict, if not issue a HEAD request and save the value
@@ -70,7 +70,6 @@ if not origin_info then
 	file_dict:set(ngx.var.uri .. "-update", true, 5)
 	local ok, code, headers, status, body = httpc:request { 
 		url = backend_dew .. ngx.var.uri, 
-		keepalive = 1,
 		method = 'HEAD' 
 	}
         if code ~= 200 and code ~= 206 then
@@ -84,7 +83,6 @@ if not origin_info then
 	for key, value in pairs(bypass_headers) do
 		origin_headers[value] = headers[key]
 	end
-	ngx.log(ngx.ERR, "HEAD OK with ", code, " ", status)
 	origin_info = cjson.encode(origin_headers)
 	file_dict:set(ngx.var.uri .. "-info", origin_info, fcttl)
 	file_dict:delete(ngx.var.uri .. "-update")
@@ -99,7 +97,6 @@ if string.match(is_get, "HEAD") then
         end
 	-- should 
         ngx.status = 200
-	ngx.log(ngx.ERR, "HEAD detected with ", code, " ", status)
 	ngx.send_headers()
         ngx.eof()
         return ngx.exit(ngx.status)
@@ -214,7 +211,6 @@ for block_range_start = block_start, stop, block_size do
 	local req_params = {
 		url = backend .. ngx.var.uri,
 		method = 'GET',
-		keepalive = 1,
 		headers = {
 			Range = "bytes=" .. block_range_start .. "-" .. block_range_stop,
 		}
