@@ -70,6 +70,7 @@ if not origin_info then
 	file_dict:set(ngx.var.uri .. "-update", true, 5)
 	local ok, code, headers, status, body = httpc:request { 
 		url = backend_dew .. ngx.var.uri, 
+		keepalive = 1,
 		method = 'HEAD' 
 	}
         if code ~= 200 and code ~= 206 then
@@ -210,6 +211,7 @@ for block_range_start = block_start, stop, block_size do
 
 	local req_params = {
 		url = backend .. ngx.var.uri,
+		keepalive = 1,
 		method = 'GET',
 		headers = {
 			Range = "bytes=" .. block_range_start .. "-" .. block_range_stop,
