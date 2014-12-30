@@ -76,7 +76,9 @@ if not origin_info then
         if code ~= 200 and code ~= 206 then
 		file_dict:delete(ngx.var.uri .. "-update")
 		ngx.status = code
-                ngx.log(ngx.ERR, "HEAD has failed with ", code, " ", status)
+		if code ~= 301 then
+			ngx.log(ngx.ERR, "HEAD has failed with ", code, " ", status)
+		end
 		ngx.eof()
 		return ngx.exit(code)
         end
