@@ -70,7 +70,6 @@ if not origin_info then
 	file_dict:set(ngx.var.uri .. "-update", true, 5)
 	local ok, code, headers, status, body = httpc:request { 
 		url = backend_dew .. ngx.var.uri, 
-		keepalive = 1,
 		method = 'HEAD' 
 	}
         if code ~= 200 and code ~= 206 then
