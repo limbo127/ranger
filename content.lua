@@ -7,7 +7,7 @@ local bslib = require("bitset") -- https://github.com/bsm/bitset.lua
 local block_size = 128*1024 -- Block size 256k
 local backend = "http://127.0.0.1:4242/" -- backend
 local backend_dew = "http://127.0.0.1:8081/" -- backend_dew
-local fcttl = 86400 -- Time to cache HEAD requests
+local fcttl = 15 -- Time to cache HEAD requests
 local wait_lock = 0.001 -- Time to wait lock for concurrency access
 
 local manage_stats = 0 -- 1 to compute Hit/Miss stats, 0 to disable
